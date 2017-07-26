@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/vue.js"></script>
+    <style>
+        div,ul,li,p{
+            margin:0;
+            padding:0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        .fl{
+            float:left;
+        }
+        .fr{
+            float:right;
+        }
+        .of:after{
+            content:".";
+            height:0;
+            visibility:hidden;
+            display:block;
+            clear:both;
+        }
+        h3{
+            text-align: center;
+        }
+        .todos{
+            width:600px;
+            min-height: 400px;
+            margin:80px auto 0;
+        }
+        .add_sth>ul{
+            width:100%;
+        }
+        .add_sth>ul>li{
+             margin:10px 0;
+         }
+        .add_sth>ul>li>ul>li{
+            float:left;
+            width:100px;
+            margin-left: 20px;
+        }
+        .red{
+            color:red;
+        }
+        .todo_list>ul{
+           width:100%;
+        }
+        .todo_list>ul>li{
+            margin:10px 0;
+        }
+        .close{
+            float:right;
+            color:red;
+            cursor: pointer;
+        }
+        .todo_delete{
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<!--模板-->
+<div class="todos main">
+    <h3>任务计划表</h3>
+    <div class="add_sth">
+        添加任务：<br/>
+        <input type="text" v-on:keyup.enter="addTodo" v-model="todo">
+        <ul class="of" v-show="list.length">
+            <li class="fl red">{{noCheckedLength}}个任务未完成</li>
+            <li class="fr">
+                <ul class="of">
+                    <li><a href="#all">所有任务</a></li>
+                    <li><a href="#unfinished">未完成任务</a></li>
+                    <li><a href="#finished">完成任务</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="todo_list">
+        任务列表:
+        <ul>
+            <li v-show="!list.length">还没有任何添加任务！</li>
+            <li v-for="item in filteredList">
+                <div class="view" v-show="item!==editTodos">
+                    <input type="checkbox" name="" id="" v-model="item.isChecked"/>
+                    <span v-on:dblclick="editTodo(item)" v-bind:class="{todo_delete:item.isChecked}">{{item.title}}</span>
+                    <span v-on:click="deleteTodo(item)" class="close">X</span>
+                </div>
+                <input type="text" class="editView"
+                       v-focus="editTodos===item"
+                       v-show="item===editTodos"
+                       v-model="item.title"
+                       v-on:blur="editTodoed(item)"
+                       v-on:keyup.enter="editTodoed(item)"
+                       v-on:keyup.esc="canselTodo(item)"
+                        />
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
